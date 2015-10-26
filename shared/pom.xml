@@ -43,6 +43,10 @@
                         </goals>
                         <configuration>
                             <outputFile>${project.build.outputDirectory}/${project.artifactId}.js</outputFile>
+                            <sourceDirs>
+                                <dir>${project.basedir}/src/main/kotlin</dir>
+                                <dir>${project.basedir}/src/main/kotlin.js</dir>
+                            </sourceDirs>
                         </configuration>
                     </execution>
                 </executions>

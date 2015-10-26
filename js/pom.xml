@@ -152,7 +152,7 @@
                         <goals>
                             <goal>karma</goal>
                         </goals>
-                        <phase>none</phase>
+                        <phase>test</phase>
                         <configuration>
                             <karmaConfPath>${project.basedir}/src/test/karma/karma.conf.js</karmaConfPath>
                             <skip>${maven.test.skip}</skip>
