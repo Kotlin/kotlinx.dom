@@ -1,6 +1,7 @@
 package kotlinx.dom
 
-import org.w3c.dom.*
+import org.w3c.dom.Element
+import org.w3c.dom.Document
 import org.w3c.dom.DOMTokenList
 import org.w3c.dom.HTMLCollection
 import org.w3c.dom.HTMLElement
@@ -39,3 +40,4 @@ private class DOMTokenListView(val delegate: DOMTokenList) : AbstractList<String
 }
 
 public fun DOMTokenList.asList(): List<String> = DOMTokenListView(this)
+internal fun HTMLCollection.asElementList(): List<Element> = asList()

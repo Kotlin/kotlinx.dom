@@ -3,7 +3,7 @@ package kotlinx.dom
 import org.w3c.dom.*
 
 /** Returns true if the element has the given CSS class style in its 'class' attribute */
-fun Element.hasClass(cssClass: String): Boolean = classesShared.matches("""(^|.*\s+)$cssClass($|\s+.*)""".toRegex())
+fun Element.hasClass(cssClass: String): Boolean = classes.matches("""(^|.*\s+)$cssClass($|\s+.*)""".toRegex())
 
 /**
  * Adds CSS class to element. Has no effect if all specified classes are already in class attribute of the element
@@ -13,8 +13,8 @@ fun Element.hasClass(cssClass: String): Boolean = classesShared.matches("""(^|.*
 fun Element.addClass(vararg cssClasses: String): Boolean {
     val missingClasses = cssClasses.filterNot { hasClass(it) }
     if (missingClasses.isNotEmpty()) {
-        val presentClasses = classesShared.trim()
-        classesShared = buildString {
+        val presentClasses = classes.trim()
+        classes = buildString {
             append(presentClasses)
             if (!presentClasses.isEmpty()) {
                 append(" ")
@@ -35,14 +35,14 @@ fun Element.addClass(vararg cssClasses: String): Boolean {
 fun Element.removeClass(vararg cssClasses: String): Boolean {
     if (cssClasses.any { hasClass(it) }) {
         val toBeRemoved = cssClasses.toSet()
-        classesShared = classesShared.trim().split("\\s+".toRegex()).filter { it !in toBeRemoved }.joinToString(" ")
+        classes = classes.trim().split("\\s+".toRegex()).filter { it !in toBeRemoved }.joinToString(" ")
         return true
     }
 
     return false
 }
 
-private var Element.classesShared: String
+var Element.classes: String
     get() = this.getAttribute("class") ?: ""
     set(value) {
         this.setAttribute("class", value)

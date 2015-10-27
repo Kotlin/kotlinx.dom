@@ -4,14 +4,8 @@
 
     <groupId>org.jetbrains.kotlinx</groupId>
     <artifactId>kotlinx.dom</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <modules>
-        <module>shared</module>
-        <module>jvm</module>
-        <module>js</module>
-        <module>assembly</module>
-    </modules>
 
     <url>https://github.com/Kotlin/kotlinx.dom</url>
     <scm>
@@ -31,6 +25,7 @@
     </developers>
 
     <properties>
+        <kotlin.version>1.0.0-beta-1038</kotlin.version>
     </properties>
 
     <dependencies>
@@ -58,10 +53,75 @@
     </dependencyManagement>
 
     <build>
-        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
-        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
-
         <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <dir>${project.basedir}/src/main/kotlin</dir>
+                                <dir>${project.basedir}/src/main/kotlin.jvm</dir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+
+                    <!--<execution>-->
+                        <!--<id>test-compile</id>-->
+                        <!--<phase>test-compile</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>test-compile</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+
+                    <execution>
+                        <id>js-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>js</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${project.build.outputDirectory}/${project.artifactId}.js</outputFile>
+                            <sourceDirs>
+                                <dir>${project.basedir}/src/main/kotlin</dir>
+                                <dir>${project.basedir}/src/main/kotlin.js</dir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kdoc-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <forceCreation>true</forceCreation>
+                    <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                    <archive>
+                        <forced />
+                        <manifestEntries>
+                            <Built-By>${user.name}</Built-By>
+
+                            <Implementation-Vendor>JetBrains s.r.o.</Implementation-Vendor>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -140,47 +200,32 @@
 
     <profiles>
         <profile>
-            <id>kotlin-latest</id>
-            <properties>
-                 <kotlin.version>1.0.0-beta-1038</kotlin.version>
-            </properties>
-        </profile>
-        <profile>
-            <id>kotlin-snapshot</id>
+            <id>kotlin-jvm</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <properties>
-                <kotlin.version>0.1-SNAPSHOT</kotlin.version>
-            </properties>
 
-            <repositories>
-                <repository>
-                    <id>sonatype.oss.snapshots</id>
-                    <name>Sonatype OSS Snapshot Repository</name>
-                    <url>http://oss.sonatype.org/content/repositories/snapshots</url>
-                    <releases>
-                        <enabled>false</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </repository>
-            </repositories>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jetbrains.kotlin</groupId>
+                    <artifactId>kotlin-stdlib</artifactId>
+                    <version>${kotlin.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>kotlin-js</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
 
-            <pluginRepositories>
-                <pluginRepository>
-                    <id>sonatype.oss.snapshots</id>
-                    <name>Sonatype OSS Snapshot Repository</name>
-                    <url>http://oss.sonatype.org/content/repositories/snapshots</url>
-                    <releases>
-                        <enabled>false</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </pluginRepository>
-            </pluginRepositories>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jetbrains.kotlin</groupId>
+                    <artifactId>kotlin-js-library</artifactId>
+                    <version>${kotlin.version}</version>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
 </project>
