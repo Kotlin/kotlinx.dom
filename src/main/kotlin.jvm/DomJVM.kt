@@ -13,8 +13,11 @@ import javax.xml.transform.*
 import javax.xml.transform.dom.*
 import javax.xml.transform.stream.*
 
+@Deprecated("Use search instead as there is ambigousity with JavaScript", ReplaceWith("this.search(selector)"))
+operator fun Document?.get(selector: String): List<Element> = search(selector)
+
 /** Searches for elements using the element name, an element ID (if prefixed with dot) or element class (if prefixed with #) */
-operator fun Document?.get(selector: String): List<Element> {
+fun Document?.search(selector: String): List<Element> {
     val root = this?.documentElement
     return if (root != null) {
         if (selector == "*") {
@@ -37,8 +40,11 @@ operator fun Document?.get(selector: String): List<Element> {
     }
 }
 
+@Deprecated("Use search instead as there is ambigousity with JavaScript", ReplaceWith("this.search(selector)"))
+operator fun Element.get(selector: String): List<Element> = search(selector)
+
 /** Searches for elements using the element name, an element ID (if prefixed with dot) or element class (if prefixed with #) */
-operator fun Element.get(selector: String): List<Element> {
+fun Element.search(selector: String): List<Element> {
     return if (selector == "*") {
         elements()
     } else if (selector.startsWith(".")) {
@@ -60,12 +66,6 @@ var Element.id: String
     set(value) {
         this.setAttribute("id", value)
         this.setIdAttribute("id", true)
-    }
-
-var Element.style: String
-    get() = this.getAttribute("style") ?: ""
-    set(value) {
-        this.setAttribute("style", value)
     }
 
 /**
@@ -106,21 +106,9 @@ fun Node.nextElements(): List<Element> = nextSiblings().filterIsInstance<Element
 /** Returns an [Iterator] of all the previous [Element] siblings */
 fun Node.previousElements(): List<Element> = previousSiblings().filterIsInstance<Element>()
 
-
-var Element.classSet: Set<String>
-    get() {
-        val answer = LinkedHashSet<String>()
-        val array = this.className.split("""\s""".toPattern())
-        for (s in array) {
-            if (s.length > 0) {
-                answer.add(s)
-            }
-        }
-        return answer
-    }
-    set(value) {
-        this.className = value.joinToString(" ")
-    }
+@Suppress("UNCHECKED_CAST")
+fun List<Node>.filterElements(): List<Element> = filter { it.isElement } as List<Element>
+fun NodeList.filterElements(): List<Element> = asList().filterElements()
 
 
 /** Creates a new document with the given document builder*/

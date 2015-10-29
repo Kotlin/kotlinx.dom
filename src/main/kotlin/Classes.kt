@@ -1,6 +1,7 @@
 package kotlinx.dom
 
 import org.w3c.dom.*
+import java.util.*
 
 /** Returns true if the element has the given CSS class style in its 'class' attribute */
 fun Element.hasClass(cssClass: String): Boolean = classes.matches("""(^|.*\s+)$cssClass($|\s+.*)""".toRegex())
@@ -46,4 +47,12 @@ var Element.classes: String
     get() = this.getAttribute("class") ?: ""
     set(value) {
         this.setAttribute("class", value)
+    }
+
+var Element.classSet: Set<String>
+    get() {
+        return this.className.split("""\s+""".toRegex()).filter { it.isNotEmpty() }.toSet()
+    }
+    set(value) {
+        this.className = value.joinToString(" ")
     }

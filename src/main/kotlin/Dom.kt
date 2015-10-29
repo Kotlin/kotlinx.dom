@@ -71,10 +71,6 @@ fun NodeList?.toElementList(): List<Element> = this?.asElementList() ?: emptyLis
  */
 fun NodeList.asElementList(): List<Element> = if (length == 0) emptyList() else ElementListAsList(this)
 
-@Suppress("UNCHECKED_CAST")
-fun List<Node>.filterElements(): List<Element> = filter { it.isElement } as List<Element>
-fun NodeList.filterElements(): List<Element> = asList().filterElements()
-
 private class NodeListAsList(private val delegate: NodeList) : AbstractList<Node>() {
     override val size: Int get() = delegate.length
 
@@ -132,6 +128,12 @@ private class PreviousSiblings(private var node: Node) : Iterable<Node> {
         }
     }
 }
+
+var Element.style: String
+    get() = this.getAttribute("style") ?: ""
+    set(value) {
+        this.setAttribute("style", value)
+    }
 
 /**
  * it is *true* when [Node.nodeType] is TEXT_NODE or CDATA_SECTION_NODE

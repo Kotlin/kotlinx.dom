@@ -76,13 +76,33 @@
                         </configuration>
                     </execution>
 
-                    <!--<execution>-->
-                        <!--<id>test-compile</id>-->
-                        <!--<phase>test-compile</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>test-compile</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <dir>${project.basedir}/src/test/kotlin</dir>
+                                <dir>${project.basedir}/src/test/kotlin.jvm</dir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>test-compile-js</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>test-js</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <dir>${project.basedir}/src/test/kotlin</dir>
+                                <dir>${project.basedir}/src/test/kotlin.js</dir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
 
                     <execution>
                         <id>js-compile</id>
@@ -99,10 +119,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kdoc-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -154,6 +170,78 @@
                     <reuseForks>true</reuseForks>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <phase>generate-test-resources</phase>
+                        <configuration>
+                            <includeScope>test</includeScope>
+                            <includeTypes>jar</includeTypes>
+                            <outputDirectory>${project.basedir}/target/test-js</outputDirectory>
+                            <includes>*.js</includes>
+                            <excludes>*.meta.js</excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>0.0.26</version>
+
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${maven.test.skip}</skip>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>npm install</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <!-- Optional configuration which provides for running any npm command -->
+                        <configuration>
+                            <arguments>install</arguments>
+                            <skip>${maven.test.skip}</skip>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>javascript tests</id>
+                        <goals>
+                            <goal>karma</goal>
+                        </goals>
+                        <!-- disable js tests -->
+                        <phase>none</phase>
+                        <configuration>
+                            <karmaConfPath>${project.basedir}/src/test/karma/karma.conf.js</karmaConfPath>
+                            <skip>${maven.test.skip}</skip>
+                            <skipTests>${maven.test.skip}</skipTests>
+                        </configuration>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <nodeVersion>v0.12.7</nodeVersion>
+                    <npmVersion>2.14.4</npmVersion>
+
+                    <workingDirectory>${project.basedir}/src/test/karma</workingDirectory>
+                </configuration>
+            </plugin>
         </plugins>
 
         <pluginManagement>
@@ -162,30 +250,6 @@
                     <groupId>org.jetbrains.kotlin</groupId>
                     <artifactId>kotlin-maven-plugin</artifactId>
                     <version>${kotlin.version}</version>
-                </plugin>
-
-                <!-- TODO package some apidocs to jars -->
-                <plugin>
-                    <groupId>org.jetbrains.kotlin</groupId>
-                    <artifactId>kdoc-maven-plugin</artifactId>
-                    <version>${kotlin.version}</version>
-
-                    <executions>
-                        <execution>
-                            <id>docs</id>
-                            <goals>
-                                <goal>apidoc</goal>
-                            </goals>
-                            <!--<phase>prepare-package</phase>-->
-                            <phase>none</phase>
-                        </execution>
-                    </executions>
-
-                    <configuration>
-                        <sources>
-                            <source>${pom.basedir}/src/main/kotlin</source>
-                        </sources>
-                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>

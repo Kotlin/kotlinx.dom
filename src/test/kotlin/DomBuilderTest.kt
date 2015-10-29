@@ -1,17 +1,18 @@
 package test.dom
 
-import kotlin.dom.*
+import kotlinx.dom.*
+import kotlinx.dom.build.*
+import kotlin.browser.*
 import kotlin.test.*
-import org.w3c.dom.*
 import org.junit.Test as test
 
 class DomBuilderTest() {
 
     @test fun buildDocument() {
-        var doc = createDocument()
+        var doc = document
 
         assertTrue {
-            doc["grandchild"].isEmpty()
+            doc.search("grandchild").isEmpty()
         }
 
         doc.addElement("foo") {
@@ -24,14 +25,14 @@ class DomBuilderTest() {
                 addElement("grandChild") {
                     id = "id3"
                     classes = " bar tiny"
-                    addText("Hello World!")
+                    appendText("Hello World!")
                 // TODO support neater syntax sugar for adding text?
                 // += "Hello World!"
                 }
                 addElement("grandChild2") {
                     id = "id3"
                     classes = "tiny thing bar "
-                    addText("Hello World!")
+                    appendText("Hello World!")
                 // TODO support neater syntax sugar for adding text?
                 // += "Hello World!"
                 }
@@ -39,21 +40,21 @@ class DomBuilderTest() {
         }
 
         // test css selections on document
-        assertEquals(0, doc[".doesNotExist"].size())
-        assertEquals(1, doc[".another"].size())
-        assertEquals(3, doc[".bar"].size())
-        assertEquals(2, doc[".tiny"].size())
+        assertEquals(0, doc.search(".doesNotExist").size)
+        assertEquals(1, doc.search(".another").size)
+        assertEquals(3, doc.search(".bar").size)
+        assertEquals(2, doc.search(".tiny").size)
 
         // element tag selections
-        assertEquals(0, doc["doesNotExist"].size())
-        assertEquals(1, doc["foo"].size())
-        assertEquals(1, doc["child"].size())
-        assertEquals(1, doc["grandChild"].size())
+        assertEquals(0, doc.search("doesNotExist").size)
+        assertEquals(1, doc.search("foo").size)
+        assertEquals(1, doc.search("child").size)
+        assertEquals(1, doc.search("grandChild").size)
 
         // id selections
-        assertEquals(1, doc["#id1"].size())
-        assertEquals(1, doc["#id2"].size())
-        assertEquals(1, doc["#id3"].size())
+        assertEquals(1, doc.search("#id1").size)
+        assertEquals(1, doc.search("#id2").size)
+        assertEquals(1, doc.search("#id3").size)
 
         val root = doc.documentElement
         if (root == null) {
@@ -64,21 +65,21 @@ class DomBuilderTest() {
             }
 
             // test css selections on element
-            assertEquals(0, root[".doesNotExist"].size())
-            assertEquals(1, root[".another"].size())
-            assertEquals(2, root[".bar"].size())
-            assertEquals(2, root[".tiny"].size())
+            assertEquals(0, root.search(".doesNotExist").size)
+            assertEquals(1, root.search(".another").size)
+            assertEquals(2, root.search(".bar").size)
+            assertEquals(2, root.search(".tiny").size)
 
             // element tag selections
-            assertEquals(0, root["doesNotExist"].size())
-            assertEquals(0, root["foo"].size())
-            assertEquals(1, root["child"].size())
-            assertEquals(1, root["grandChild"].size())
+            assertEquals(0, root.search("doesNotExist").size)
+            assertEquals(0, root.search("foo").size)
+            assertEquals(1, root.search("child").size)
+            assertEquals(1, root.search("grandChild").size)
 
             // id selections
-            assertEquals(1, root["#id1"].size())
-            assertEquals(1, root["#id2"].size())
-            assertEquals(1, root["#id3"].size())
+            assertEquals(1, root.search("#id1").size)
+            assertEquals(1, root.search("#id2").size)
+            assertEquals(1, root.search("#id3").size)
 
             // iterating through next element siblings
             for (e in root.nextElements()) {
@@ -86,17 +87,17 @@ class DomBuilderTest() {
             }
 
         }
-        val grandChild = doc["grandChild"].firstOrNull()
+        val grandChild = doc.search("grandChild").firstOrNull()
         if (grandChild != null) {
             assertEquals("Hello World!", grandChild.textContent)
-            assertEquals(" bar tiny", grandChild.attribute("class"))
+            assertEquals(" bar tiny", grandChild.getAttribute("class"))
 
             // test the classSet
             val classSet = grandChild.classSet
 
             assertTrue(classSet.contains("bar"))
             assertTrue(classSet.contains("tiny"))
-            assertTrue(classSet.size() == 2 )
+            assertTrue(classSet.size == 2 )
             assertFalse(classSet.contains("doesNotExist"))
 
             // lets add a new class and some existing classes
@@ -114,17 +115,17 @@ class DomBuilderTest() {
         } else {
             fail("Not an Element $grandChild")
         }
-        val child = doc["child"].firstOrNull()
+        val child = doc.search("child").firstOrNull()
         if (child != null) {
             val gc1 = child.childElements("grandChild")
-            assertEquals(1, gc1.size(), "Expected a single child but found $gc1")
+            assertEquals(1, gc1.size, "Expected a single child but found $gc1")
             val gc2 = child.childElements("grandChild2")
-            assertEquals(1, gc2.size(), "Expected a single child but found $gc2")
+            assertEquals(1, gc2.size, "Expected a single child but found $gc2")
         } else {
             fail("No child found!")
         }
         val children = doc.documentElement.children()
-        assertEquals(1, children.size())
+        assertEquals(1, children.size)
 
     }
 }

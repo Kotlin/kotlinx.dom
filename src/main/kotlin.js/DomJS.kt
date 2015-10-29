@@ -5,15 +5,17 @@ import org.w3c.dom.Document
 import org.w3c.dom.DOMTokenList
 import org.w3c.dom.HTMLCollection
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.Node
+import org.w3c.dom.NodeList
 import java.util.*
 
 /** Searches for elements using the element name, an element ID (if prefixed with dot) or element class (if prefixed with #) */
-operator fun Document?.get(selector: String): List<Element> {
+fun Document?.search(selector: String): List<HTMLElement> {
     return this?.querySelectorAll(selector)?.asList()?.filterElements() ?: emptyList()
 }
 
 /** Searches for elements using the element name, an element ID (if prefixed with dot) or element class (if prefixed with #) */
-operator fun Element.get(selector: String): List<Element> {
+fun Element.search(selector: String): List<HTMLElement> {
     return querySelectorAll(selector).asList().filterElements()
 }
 
@@ -40,4 +42,22 @@ private class DOMTokenListView(val delegate: DOMTokenList) : AbstractList<String
 }
 
 public fun DOMTokenList.asList(): List<String> = DOMTokenListView(this)
-internal fun HTMLCollection.asElementList(): List<Element> = asList()
+internal fun HTMLCollection.asElementList(): List<HTMLElement> = asList()
+
+@Suppress("UNCHECKED_CAST")
+/** Returns an [Iterator] of all the next [Element] siblings */
+fun Node.nextElements(): List<HTMLElement> = nextSiblings().filter { it.isElement } as List<HTMLElement>
+
+@Suppress("UNCHECKED_CAST")
+/** Returns an [Iterator] of all the previous [Element] siblings */
+fun Node.previousElements(): List<HTMLElement> = nextSiblings().filter { it.isElement } as List<HTMLElement>
+
+var Element.id: String
+    get() = this.getAttribute("id") ?: ""
+    set(value) {
+        this.setAttribute("id", value)
+    }
+
+@Suppress("UNCHECKED_CAST")
+fun List<Node>.filterElements(): List<HTMLElement> = filter { it.isElement } as List<HTMLElement>
+fun NodeList.filterElements(): List<HTMLElement> = asList().filterElements()
