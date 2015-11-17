@@ -26,6 +26,7 @@
 
     <properties>
         <kotlin.version>1.0.0-beta-2422</kotlin.version>
+        <dokka.version>0.9.2</dokka.version>
     </properties>
 
     <dependencies>
@@ -53,6 +54,8 @@
     </dependencyManagement>
 
     <build>
+        <sourceDirectory>src/main/kotlin</sourceDirectory>
+
         <plugins>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -153,6 +156,25 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.dokka</groupId>
+                <artifactId>dokka-maven-plugin</artifactId>
+                <version>${dokka.version}</version>
+                <executions>
+                    <execution>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>dokka</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceDirectories>
+                        <dir>src/main/kotlin</dir>
+                        <dir>src/main/kotlin.jvm</dir>
+                    </sourceDirectories>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
@@ -261,6 +283,14 @@
             <url>https://api.bintray.com/maven/kotlin/kotlinx.dom/kotlinx.dom</url>
         </repository>
     </distributionManagement>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jcenter</id>
+            <name>JCenter</name>
+            <url>https://jcenter.bintray.com/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <profiles>
         <profile>
