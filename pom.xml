@@ -25,7 +25,7 @@
     </developers>
 
     <properties>
-        <kotlin.version>1.0.0-beta-2422</kotlin.version>
+        <kotlin.version>1.0.0-beta-2423</kotlin.version>
         <dokka.version>0.9.2</dokka.version>
     </properties>
 
@@ -90,35 +90,6 @@
                             <sourceDirs>
                                 <dir>${project.basedir}/src/test/kotlin</dir>
                                 <dir>${project.basedir}/src/test/kotlin.jvm</dir>
-                            </sourceDirs>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>test-compile-js</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>test-js</goal>
-                        </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <dir>${project.basedir}/src/test/kotlin</dir>
-                                <dir>${project.basedir}/src/test/kotlin.js</dir>
-                            </sourceDirs>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>js-compile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>js</goal>
-                        </goals>
-                        <configuration>
-                            <outputFile>${project.build.outputDirectory}/${project.artifactId}.js</outputFile>
-                            <sourceDirs>
-                                <dir>${project.basedir}/src/main/kotlin</dir>
-                                <dir>${project.basedir}/src/main/kotlin.js</dir>
                             </sourceDirs>
                         </configuration>
                     </execution>
@@ -215,60 +186,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>com.github.eirslett</groupId>
-                <artifactId>frontend-maven-plugin</artifactId>
-                <version>0.0.26</version>
 
-                <executions>
-                    <execution>
-                        <id>install node and npm</id>
-                        <!--<phase>generate-test-resources</phase>-->
-                        <phase>none</phase>
-                        <goals>
-                            <goal>install-node-and-npm</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${maven.test.skip}</skip>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>npm install</id>
-                        <!--<phase>generate-test-resources</phase>-->
-                        <phase>none</phase>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <!-- Optional configuration which provides for running any npm command -->
-                        <configuration>
-                            <arguments>install</arguments>
-                            <skip>${maven.test.skip}</skip>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>javascript tests</id>
-                        <goals>
-                            <goal>karma</goal>
-                        </goals>
-                        <!-- disable js tests -->
-                        <phase>none</phase>
-                        <configuration>
-                            <karmaConfPath>${project.basedir}/src/test/karma/karma.conf.js</karmaConfPath>
-                            <skip>${maven.test.skip}</skip>
-                            <skipTests>${maven.test.skip}</skipTests>
-                        </configuration>
-                    </execution>
-                </executions>
-
-                <configuration>
-                    <nodeVersion>v0.12.7</nodeVersion>
-                    <npmVersion>2.14.4</npmVersion>
-
-                    <workingDirectory>${project.basedir}/src/test/karma</workingDirectory>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>com.devexperts.bintray</groupId>
                 <artifactId>bintray-maven-plugin</artifactId>
@@ -342,6 +260,95 @@
                     <version>${kotlin.version}</version>
                 </dependency>
             </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>test-compile-js</id>
+                                <phase>test-compile</phase>
+                                <goals>
+                                    <goal>test-js</goal>
+                                </goals>
+                                <configuration>
+                                    <sourceDirs>
+                                        <dir>${project.basedir}/src/test/kotlin</dir>
+                                        <dir>${project.basedir}/src/test/kotlin.js</dir>
+                                    </sourceDirs>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>js-compile</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>js</goal>
+                                </goals>
+                                <configuration>
+                                    <outputFile>${project.build.outputDirectory}/${project.artifactId}.js</outputFile>
+                                    <sourceDirs>
+                                        <dir>${project.basedir}/src/main/kotlin</dir>
+                                        <dir>${project.basedir}/src/main/kotlin.js</dir>
+                                    </sourceDirs>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <version>0.0.26</version>
+
+                        <executions>
+                            <execution>
+                                <id>install node and npm</id>
+                                <!--<phase>generate-test-resources</phase>-->
+                                <phase>none</phase>
+                                <goals>
+                                    <goal>install-node-and-npm</goal>
+                                </goals>
+                                <configuration>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>npm install</id>
+                                <!--<phase>generate-test-resources</phase>-->
+                                <phase>none</phase>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <!-- Optional configuration which provides for running any npm command -->
+                                <configuration>
+                                    <arguments>install</arguments>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>javascript tests</id>
+                                <goals>
+                                    <goal>karma</goal>
+                                </goals>
+                                <!-- disable js tests -->
+                                <phase>none</phase>
+                                <configuration>
+                                    <karmaConfPath>${project.basedir}/src/test/karma/karma.conf.js</karmaConfPath>
+                                </configuration>
+                            </execution>
+                        </executions>
+
+                        <configuration>
+                            <nodeVersion>v0.12.7</nodeVersion>
+                            <npmVersion>2.14.4</npmVersion>
+
+                            <workingDirectory>${project.basedir}/src/test/karma</workingDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>
