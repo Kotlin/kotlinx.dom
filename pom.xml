@@ -59,6 +59,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
             </plugin>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
@@ -142,20 +143,22 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.4</version>
-
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
                 <executions>
                     <execution>
-                        <id>attach-sources</id>
-                        <phase>prepare-package</phase>
+                        <phase>package</phase>
                         <goals>
-                            <goal>jar-no-fork</goal>
-                            <goal>test-jar-no-fork</goal>
+                            <goal>single</goal>
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/assembly/sources.xml</descriptor>
+                        <descriptor>src/assembly/dokka.xml</descriptor>
+                    </descriptors>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jetbrains.dokka</groupId>
@@ -163,7 +166,7 @@
                 <version>${dokka.version}</version>
                 <executions>
                     <execution>
-                        <phase>pre-site</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>dokka</goal>
                         </goals>
@@ -220,7 +223,8 @@
                 <executions>
                     <execution>
                         <id>install node and npm</id>
-                        <phase>generate-test-resources</phase>
+                        <!--<phase>generate-test-resources</phase>-->
+                        <phase>none</phase>
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
@@ -231,7 +235,8 @@
 
                     <execution>
                         <id>npm install</id>
-                        <phase>generate-test-resources</phase>
+                        <!--<phase>generate-test-resources</phase>-->
+                        <phase>none</phase>
                         <goals>
                             <goal>npm</goal>
                         </goals>
@@ -263,6 +268,23 @@
 
                     <workingDirectory>${project.basedir}/src/test/karma</workingDirectory>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.devexperts.bintray</groupId>
+                <artifactId>bintray-maven-plugin</artifactId>
+                <version>1.0</version>
+                <configuration>
+                    <id>bintray</id>
+                    <url>https://api.bintray.com/maven/kotlin/kotlinx.dom/kotlinx.dom</url>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>bintray-deploy</id>
+                        <goals>
+                            <goal>publish</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
 
