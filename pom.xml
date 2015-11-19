@@ -281,7 +281,7 @@
                     <execution>
                         <id>bintray-deploy</id>
                         <goals>
-                            <goal>publish</goal>
+                            <!--<goal>publish</goal>-->
                         </goals>
                     </execution>
                 </executions>
