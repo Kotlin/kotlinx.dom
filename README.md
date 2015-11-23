@@ -12,11 +12,11 @@
 <repositories>
   <repository>
     <snapshots>
-      <enabled>false</enabled>
+    <enabled>false</enabled>
     </snapshots>
-    <id>bintray-kotlin-kotlinx.html</id>
+    <id>central</id>
     <name>bintray</name>
-    <url>http://dl.bintray.com/kotlin/kotlinx.dom</url>
+    <url>http://jcenter.bintray.com</url>
   </repository>
 </repositories>
 ```
@@ -25,9 +25,7 @@
 
 ```groovy
 repositories {
-    maven {
-        url "http://dl.bintray.com/kotlin/kotlinx.dom" 
-    }
+    jcenter()
 }
 
 dependencies {
