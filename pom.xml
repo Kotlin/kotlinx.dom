@@ -156,17 +156,17 @@
             <plugin>
                 <groupId>com.devexperts.bintray</groupId>
                 <artifactId>bintray-maven-plugin</artifactId>
-                <version>1.0</version>
-                <configuration>
-                    <id>bintray</id>
-                    <url>https://api.bintray.com/maven/kotlin/kotlinx.dom/kotlinx.dom</url>
-                </configuration>
+                <version>1.0.1</version>
                 <executions>
                     <execution>
                         <id>bintray-deploy</id>
                         <goals>
-                            <!--<goal>publish</goal>-->
+                            <goal>publish</goal>
                         </goals>
+                        <configuration>
+                            <id>bintray</id>
+                            <url>https://api.bintray.com/maven/kotlin/kotlinx.dom/kotlinx.dom</url>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
