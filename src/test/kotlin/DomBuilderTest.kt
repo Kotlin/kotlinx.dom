@@ -2,7 +2,7 @@ package test.dom
 
 import kotlinx.dom.*
 import kotlinx.dom.build.*
-import kotlin.browser.*
+import kotlinx.browser.*
 import kotlin.test.*
 import org.junit.Test as test
 

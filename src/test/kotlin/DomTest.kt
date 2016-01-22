@@ -4,7 +4,7 @@ import kotlinx.dom.*
 import kotlin.*
 import kotlin.test.*
 import org.w3c.dom.*
-import kotlin.browser.*
+import kotlinx.browser.*
 import org.junit.Test as test
 
 class DomTest {

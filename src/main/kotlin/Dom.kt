@@ -3,7 +3,6 @@ package kotlinx.dom
 // TODO should not need this - its here for the JS stuff
 import org.w3c.dom.*
 import java.util.*
-import kotlin.support.*
 
 // Properties
 

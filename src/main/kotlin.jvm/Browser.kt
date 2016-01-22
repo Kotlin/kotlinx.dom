@@ -1,4 +1,4 @@
-package kotlin.browser
+package kotlinx.browser
 
 import kotlinx.dom.*
 import org.w3c.dom.*
