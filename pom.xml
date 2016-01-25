@@ -5,13 +5,13 @@
     <groupId>org.jetbrains.kotlinx</groupId>
     <artifactId>kotlinx.dom</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.7</version>
+    <version>0.0.8-SNAPSHOT</version>
 
     <url>https://github.com/Kotlin/kotlinx.dom</url>
     <scm>
         <connection>scm:git:git@github.com:Kotlin/kotlinx.dom.git</connection>
         <url>https://github.com/Kotlin/kotlinx.dom</url>
-        <tag>kotlinx.dom-0.0.7</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <developers>
