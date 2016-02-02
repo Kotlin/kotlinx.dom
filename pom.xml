@@ -5,7 +5,7 @@
     <groupId>org.jetbrains.kotlinx</groupId>
     <artifactId>kotlinx.dom</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.8-SNAPSHOT</version>
+    <version>0.0.8-rc</version>
 
     <url>https://github.com/Kotlin/kotlinx.dom</url>
     <scm>
@@ -25,7 +25,7 @@
     </developers>
 
     <properties>
-        <kotlin.version>1.0.0-beta-4589</kotlin.version>
+        <kotlin.version>1.0.0-rc-1025</kotlin.version>
         <dokka.version>0.9.4</dokka.version>
     </properties>
 
@@ -170,7 +170,7 @@
                         </goals>
                         <configuration>
                             <id>bintray</id>
-                            <url>https://api.bintray.com/maven/kotlin/kotlinx.dom/kotlinx.dom</url>
+                            <url>https://api.bintray.com/maven/kotlin/kotlin-eap/kotlinx.dom</url>
                         </configuration>
                     </execution>
                 </executions>
@@ -191,16 +191,34 @@
     <distributionManagement>
         <repository>
             <id>bintray</id>
-            <url>https://api.bintray.com/maven/kotlin/kotlinx.dom/kotlinx.dom</url>
+            <url>https://api.bintray.com/maven/kotlin/kotlin-eap/kotlinx.dom</url>
         </repository>
     </distributionManagement>
 
+<repositories>
+<repository>
+<snapshots>
+<enabled>false</enabled>
+</snapshots>
+<id>bintray-kotlin-kotlin-eap</id>
+<name>bintray</name>
+<url>http://dl.bintray.com/kotlin/kotlin-eap</url>
+</repository>
+</repositories>
     <pluginRepositories>
         <pluginRepository>
             <id>jcenter</id>
             <name>JCenter</name>
             <url>https://jcenter.bintray.com/</url>
         </pluginRepository>
+<pluginRepository>
+<snapshots>
+<enabled>false</enabled>
+</snapshots>
+<id>bintray-kotlin-kotlin-eap</id>
+<name>bintray-plugins</name>
+<url>http://dl.bintray.com/kotlin/kotlin-eap</url>
+</pluginRepository>
     </pluginRepositories>
 
     <profiles>
