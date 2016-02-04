@@ -27,6 +27,7 @@
     <properties>
         <kotlin.version>1.0.0-rc-1036</kotlin.version>
         <dokka.version>0.9.4</dokka.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
