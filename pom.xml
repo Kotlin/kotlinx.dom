@@ -5,7 +5,7 @@
     <groupId>org.jetbrains.kotlinx</groupId>
     <artifactId>kotlinx.dom</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.8-rc</version>
+    <version>0.0.9-rc</version>
 
     <url>https://github.com/Kotlin/kotlinx.dom</url>
     <scm>
@@ -25,7 +25,7 @@
     </developers>
 
     <properties>
-        <kotlin.version>1.0.0-rc-1025</kotlin.version>
+        <kotlin.version>1.0.0-rc-1035</kotlin.version>
         <dokka.version>0.9.4</dokka.version>
     </properties>
 
