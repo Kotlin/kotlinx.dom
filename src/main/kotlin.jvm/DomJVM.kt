@@ -7,7 +7,6 @@ package kotlinx.dom
 import org.w3c.dom.*
 import org.xml.sax.*
 import java.io.*
-import java.util.*
 import javax.xml.parsers.*
 import javax.xml.transform.*
 import javax.xml.transform.dom.*
@@ -165,13 +164,16 @@ fun parseXml(inputSource: InputSource, builder: DocumentBuilder = defaultDocumen
 
 
 /** Creates a new TrAX transformer */
-fun createTransformer(source: Source? = null, factory: TransformerFactory = TransformerFactory.newInstance()!!): Transformer {
-    val transformer = if (source != null) {
+fun createTransformer(source: Source? = null, factory: TransformerFactory = TransformerFactory.newInstance()!!, outputProperties: Map<String, String> = emptyMap()): Transformer {
+    val transformer : Transformer = if (source != null) {
         factory.newTransformer(source)
     } else {
         factory.newTransformer()
     }
-    return transformer!!
+    for ((key, value) in outputProperties) {
+        transformer.setOutputProperty(key, value)
+    }
+    return transformer
 }
 
 /** Converts the node to an XML String */
@@ -184,9 +186,22 @@ fun Node.toXmlString(xmlDeclaration: Boolean): String {
     return writer.toString()
 }
 
+/** Converts the node to an XML String */
+fun Node.toXmlString(outputProperties: Map<String, String>): String {
+    val writer = StringWriter()
+    writeXmlString(writer, outputProperties)
+    return writer.toString()
+}
+
 /** Converts the node to an XML String and writes it to the given [Writer] */
 fun Node.writeXmlString(writer: Writer, xmlDeclaration: Boolean): Unit {
     val transformer = createTransformer()
     transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, if (xmlDeclaration) "no" else "yes")
+    transformer.transform(DOMSource(this), StreamResult(writer))
+}
+
+/** Converts the node to an XML String and writes it to the given [Writer] */
+fun Node.writeXmlString(writer: Writer, outputProperties: Map<String, String>): Unit {
+    val transformer = createTransformer(outputProperties = outputProperties)
     transformer.transform(DOMSource(this), StreamResult(writer))
 }
