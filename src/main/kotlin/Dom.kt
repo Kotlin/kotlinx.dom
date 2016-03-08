@@ -17,6 +17,12 @@ fun Element?.childElements(): List<Element> = this?.childNodes?.filterElements()
 /** Returns the child elements of this element with the given name */
 fun Element?.childElements(name: String): List<Element> = this?.childNodes?.filterElements()?.filter { it.nodeName == name } ?: emptyList()
 
+/** Returns the first child element of this element with the given name or null if no such element is found */
+fun Element?.firstChildElement(name: String): Element? = this?.childNodes?.filterElements()?.firstOrNull { it.nodeName == name }
+
+/** Returns the first child element of this element or null if there are no child elements */
+fun Element?.firstChildElement(): Element? = this?.childNodes?.filterElements()?.firstOrNull()
+
 /** The descendant elements of this document */
 @Deprecated("Use elements() function instead", ReplaceWith("this.elements()"))
 val Document?.elements: List<Element>

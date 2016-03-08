@@ -140,6 +140,32 @@ class DomTest {
         assertNull(child.parentNode)
     }
 
+
+    @test fun testChildElements() {
+        val doc = document
+        val parent = doc.createElement("a")
+        val child1 = doc.createElement("b")
+        val child2 = doc.createElement("b")
+        val child3 = doc.createElement("c")
+
+        parent + child1
+        parent + child2
+        parent + child3
+
+        assertEquals(listOf(child1, child2, child3), parent.childElements())
+        assertEquals(listOf(child1, child2), parent.childElements("b"))
+        assertEquals(listOf(child3), parent.childElements("c"))
+
+        assertEquals(child1, parent.firstChildElement())
+        assertEquals(null, child1.firstChildElement())
+        assertEquals(null, null.firstChildElement())
+
+        assertEquals(child1, parent.firstChildElement("b"))
+        assertEquals(child3, parent.firstChildElement("c"))
+        assertEquals(null, parent.firstChildElement("d"))
+        assertEquals(null, null.firstChildElement("b"))
+    }
+
     private fun assertCssClass(e: Element, value: String?): Unit {
         val cl = e.classes
         val cl2 = e.getAttribute("class") ?: ""
