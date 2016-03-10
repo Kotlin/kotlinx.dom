@@ -6,7 +6,7 @@ import kotlinx.dom.*
 /**
  * Creates a new element which can be configured via a function
  */
-fun Document.createElement(name: String, init: Element.() -> Unit): Element {
+fun Document.createElement(name: String, init: Element.() -> Unit = {}): Element {
     val elem = createElement(name)
     elem.init()
     return elem
@@ -15,7 +15,7 @@ fun Document.createElement(name: String, init: Element.() -> Unit): Element {
 /**
  * Creates a new element to an element which has an owner Document which can be configured via a function
  */
-fun Element.createElement(name: String, doc: Document? = null, init: Element.() -> Unit): Element {
+fun Element.createElement(name: String, doc: Document? = null, init: Element.() -> Unit = {}): Element {
     val elem = ownerDocument(doc).createElement(name)
     elem.init()
     return elem
@@ -24,7 +24,7 @@ fun Element.createElement(name: String, doc: Document? = null, init: Element.() 
 /**
  * Adds a newly created element which can be configured via a function
  */
-fun Document.addElement(name: String, init: Element.() -> Unit): Element {
+fun Document.addElement(name: String, init: Element.() -> Unit = {}): Element {
     val child = createElement(name, init)
     this.appendChild(child)
     return child
@@ -33,7 +33,7 @@ fun Document.addElement(name: String, init: Element.() -> Unit): Element {
 /**
  * Adds a newly created element to an element which has an owner Document which can be configured via a function
  */
-fun Element.addElement(name: String, doc: Document? = null, init: Element.() -> Unit): Element {
+fun Element.addElement(name: String, doc: Document? = null, init: Element.() -> Unit = {}): Element {
     val child = createElement(name, doc, init)
     this.appendChild(child)
     return child
