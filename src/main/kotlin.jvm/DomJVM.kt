@@ -15,7 +15,7 @@ import javax.xml.transform.stream.*
 @Deprecated("Use search instead as there is ambigousity with JavaScript", ReplaceWith("this.search(selector)"))
 operator fun Document?.get(selector: String): List<Element> = search(selector)
 
-/** Searches for elements using the element name, an element ID (if prefixed with dot) or element class (if prefixed with #) */
+/** Searches for elements using the element name, an element ID (if prefixed with #) or element class (if prefixed with dot) */
 fun Document?.search(selector: String): List<Element> {
     val root = this?.documentElement
     return if (root != null) {
@@ -42,7 +42,7 @@ fun Document?.search(selector: String): List<Element> {
 @Deprecated("Use search instead as there is ambigousity with JavaScript", ReplaceWith("this.search(selector)"))
 operator fun Element.get(selector: String): List<Element> = search(selector)
 
-/** Searches for elements using the element name, an element ID (if prefixed with dot) or element class (if prefixed with #) */
+/** Searches for elements using the element name, an element ID (if prefixed with #) or element class (if prefixed with dot) */
 fun Element.search(selector: String): List<Element> {
     return if (selector == "*") {
         elements()
